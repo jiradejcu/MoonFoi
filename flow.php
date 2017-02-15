@@ -19,7 +19,7 @@ function setState($actor, $state) {
 }
 
 function requestPickup($actor, $lat, $lon) {
-	curl_post('state', [
+	curl_post('requests', [
 		'customer_id' => $actor,
 		'lat'         => $lat,
 		'lon'         => $lon
