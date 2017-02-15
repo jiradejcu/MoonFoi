@@ -1,16 +1,45 @@
 <?php
 require_once 'flow.php';
 
-function parseMessage($message, $actor) {
-	$responseMessage = $message;
+function parseMessage($message, $type, $actor) {
+	$responseMessage = [
+		'type'    => 'text',
+		'message' => 'วันหลังมาใหม่นะครับ'
+	];
 
 	$state = getState($actor);
 
-	if ($state == INIT) {
-		$responseMessage = [
-			'type'    => 'confirm',
-			'message' => 'ให้ไปเก็บขยะใช่มั้ยครับ'
-		];
+	switch ($state) {
+		case INIT :
+			setState($actor, ASKING);
+
+			$responseMessage = [
+				'type'    => 'confirm',
+				'message' => 'ให้ไปเก็บขยะใช่มั้ยครับ'
+			];
+			break;
+
+		case ASKING :
+			if ($message == 'Yes') {
+				setState($actor, LOCATION);
+
+				$responseMessage = [
+					'type'    => 'text',
+					'message' => 'ขอตำแหน่งที่ตั้งของคุณหน่อยครับ'
+				];
+			}
+			break;
+
+		case LOCATION:
+			if ($type == 'location') {
+				setState($actor, INIT);
+
+				$responseMessage = [
+					'type'    => 'text',
+					'message' => 'เดี๋ยวจะส่งคนไปเก็บครับ ขอบคุณครับ'
+				];
+			}
+			break;
 	}
 
 	return $responseMessage;

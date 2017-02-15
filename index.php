@@ -23,13 +23,10 @@ if (!empty($events['events'])) {
 		switch ($event['type']) {
 			case 'message':
 				$message = $event['message'];
-				switch ($message['type']) {
-					case 'text':
-						$response_message = parseMessage($message['text'], $event['source']['userId']);
-						break;
-					default:
-						error_log("Unsupported message type: " . $message['type']);
-						break;
+				if (in_array($message['type'], ['text', 'location'])) {
+					$response_message = parseMessage($message['text'], $message['type'], $event['source']['userId']);
+				} else {
+					error_log("Unsupported message type: " . $message['type']);
 				}
 
 				if (!empty($response_message)) {
