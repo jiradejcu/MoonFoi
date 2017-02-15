@@ -24,7 +24,7 @@ if (!empty($events['events'])) {
 			case 'message':
 				$message = $event['message'];
 				if (in_array($message['type'], ['text', 'location'])) {
-					$response_message = parseMessage($message['text'], $message['type'], $event['source']['userId']);
+					$response_message = parseMessage($message, $message['type'], $event['source']['userId']);
 				} else {
 					error_log("Unsupported message type: " . $message['type']);
 				}

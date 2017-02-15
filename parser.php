@@ -20,7 +20,7 @@ function parseMessage($message, $type, $actor) {
 			break;
 
 		case ASKING :
-			if ($message == 'Yes') {
+			if ($message['text'] == 'Yes') {
 				setState($actor, LOCATION);
 
 				$responseMessage = [
@@ -33,6 +33,8 @@ function parseMessage($message, $type, $actor) {
 		case LOCATION:
 			if ($type == 'location') {
 				setState($actor, INIT);
+
+				requestPickup($actor, $message['latitude'], $message['longitude']);
 
 				$responseMessage = [
 					'type'    => 'text',
