@@ -4,7 +4,10 @@ require_once 'parser.php';
 
 use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
+use LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder;
 
 define('CHANNEL_ACCESS_TOKEN', '7cjzSpFFymohVQYGhOeEU7ilbD63+vJi0kq370gDvVJAmEcQbFPGx510jN4Ler+MJqlWGp4Z4pud50p3awCOA2hTaYXyt8LFbmPY6jYI9jsdQUz/HUn7cnfz/fgNGBRxWVzd0pWTcMTmjf2p3ET1+gdB04t89/1O/w1cDnyilFU=');
 define('CHANNEL_SECRET', '0fbe9cf82e4136a094f52111c69a7f10');
@@ -44,7 +47,7 @@ if (!empty($events['events'])) {
 					}
 
 					if (!empty($messageBuilder)) {
-						$response = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
+						$response = $bot->replyMessage($event['replyToken'], $messageBuilder);
 						if ($response->isSucceeded()) {
 							error_log('Success');
 
