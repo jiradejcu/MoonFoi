@@ -30,12 +30,26 @@ if (!empty($events['events'])) {
 				}
 
 				if (!empty($response_message)) {
-					$textMessageBuilder = new TextMessageBuilder($response_message);
-					$response = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
-					if ($response->isSucceeded()) {
-						error_log('Success');
+					$messageBuilder = null;
+					if ($response_message['type'] == 'text') {
+						$messageBuilder = new TextMessageBuilder($response_message['message']);
+					} else if ($response_message['type'] == 'button') {
 
-						return;
+					} else if ($response_message['type'] == 'confirm') {
+						$confirm = new ConfirmTemplateBuilder($response_message['message'], [
+							new MessageTemplateActionBuilder('Yes', 'Yes'),
+							new MessageTemplateActionBuilder('No', 'No'),
+						]);
+						$messageBuilder = new TemplateMessageBuilder($response_message['message'], $confirm);
+					}
+
+					if (!empty($messageBuilder)) {
+						$response = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
+						if ($response->isSucceeded()) {
+							error_log('Success');
+
+							return;
+						}
 					}
 
 					error_log('Fail ' . $response->getRawBody());
